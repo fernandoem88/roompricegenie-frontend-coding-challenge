@@ -13,24 +13,26 @@ import {
 import { RoomPriceGenieLogo } from '../../roompricegenie-logo';
 import { useGetSettings } from '../../hooks/useGetSettings';
 import { useGetPrices } from '../../hooks/useGetPrices';
-import { parsePriceData } from './utils';
+import { parsePriceData } from './utils/parsePriceData';
 import { DayLabels } from '../../components/DayLabels';
 import { Navbar } from '../../components/Navbar';
+import { getRoomList } from './utils/getRoomList';
+import { SearchDescription } from '../../components/SearchDescription';
 
 const today = DateTime.now().startOf('month');
 
 export const RootContainer = () => {
 	const [isoDate, setIsoDate] = useState(today.toISO() ?? '');
-	const [selectedRoom, setSelectedRoom] = useState<number>();
+	const [selectedRoomId, setSelectedRoomId] = useState<number>(-1);
 	const date = DateTime.fromISO(isoDate);
 	const startOfMonth = date.startOf('month');
 
 	const { data } = useGetPrices({
-		select: (priceData) => parsePriceData({ priceData, date }),
+		select: (priceData) => parsePriceData({ priceData, date, selectedRoomId }),
 	});
 
 	const settings = useGetSettings({
-		onChange: ({ rooms }) => setSelectedRoom(rooms.reference.id),
+		onChange: ({ rooms }) => setSelectedRoomId(rooms.reference.id),
 	});
 
 	const handlePrevious = () => {
@@ -43,16 +45,7 @@ export const RootContainer = () => {
 
 	if (!settings.data || !data) return null;
 
-	const ref = settings.data?.rooms?.reference;
-	const rooms = [
-		ref,
-		...Object.entries(settings.data?.rooms?.derived ?? {}).map(
-			([id, item]) => ({
-				id: +id,
-				...item,
-			})
-		),
-	];
+	const rooms = getRoomList({ settingsData: settings.data });
 
 	return (
 		<Container
@@ -63,7 +56,12 @@ export const RootContainer = () => {
 				overflow: 'hidden',
 			}}
 		>
-			<AppBar color="default" variant="outlined" position="static">
+			<AppBar
+				elevation={0}
+				color="default"
+				variant="outlined"
+				position="static"
+			>
 				<RoomPriceGenieLogo />
 			</AppBar>
 			<Stack pb={2} overflow="scroll">
@@ -71,19 +69,23 @@ export const RootContainer = () => {
 					<Navbar
 						onNext={handleNext}
 						onPrevious={handlePrevious}
-						onSelectedRoomIdChange={setSelectedRoom}
-						rooms={rooms ?? []}
-						selectedRoomId={selectedRoom}
+						onSelectedRoomIdChange={setSelectedRoomId}
+						rooms={rooms}
+						selectedRoomId={selectedRoomId}
 					/>
 					<DayLabels isoDate={isoDate} />
 				</Stack>
+				<SearchDescription
+					isoDate={isoDate}
+					lastUpdate={data.lastUpdate}
+					maxPrice={data.maxPrice}
+					minPrice={data.minPrice}
+					currency={data.items[0]?.currency.symbol ?? ''}
+				/>
 				<Box display="grid" gridTemplateColumns="repeat(7, 1fr)">
-					{data?.items.map(({ prices, currency, isoDate }) => {
+					{data?.items.map(({ currency, isoDate, roomDetails }) => {
 						const nthDate = DateTime.fromISO(isoDate);
 						const key = nthDate.toFormat('yyyy-MM-dd');
-						const room = rooms?.find((r) => r.id === selectedRoom);
-						const roomPrice = prices?.[room?.id ?? '']?.price;
-
 						const offset = startOfMonth.weekday - 1;
 						const gridColumn = nthDate.weekday;
 						const gridRow = Math.ceil((nthDate.day + offset) / 7);
@@ -95,9 +97,9 @@ export const RootContainer = () => {
 										title={nthDate.toFormat('DD')}
 									/>
 									<CardContent sx={{ mt: 0 }}>
-										{!!roomPrice && (
+										{!!roomDetails?.price && (
 											<Typography display="flex" gap={0.5}>
-												{roomPrice}
+												{roomDetails.price}
 												<span>{currency.symbol}</span>
 											</Typography>
 										)}
