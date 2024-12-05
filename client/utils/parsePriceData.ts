@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import type { PriceData } from '../../../../types';
+import type { PriceData } from '../../types';
 
 interface Params {
 	priceData: PriceData;
@@ -25,7 +25,6 @@ export const parsePriceData = ({ priceData, date, selectedRoomId }: Params) => {
 			currency,
 		};
 	});
-	console.log({ last_run_pricing_time });
 
 	const lastUpdate = DateTime.fromFormat(
 		last_run_pricing_time,

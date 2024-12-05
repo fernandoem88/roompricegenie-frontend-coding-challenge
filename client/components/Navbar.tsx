@@ -1,4 +1,6 @@
-import { Button, Chip, Stack } from '@mui/material';
+import { Chip, IconButton, Stack } from '@mui/material';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 interface Props {
 	onPrevious: () => void;
@@ -15,10 +17,8 @@ export const Navbar = ({
 	selectedRoomId,
 }: Props) => {
 	return (
-		<Stack component="nav" direction="row" alignItems="center" py={1}>
-			<Button onClick={onPrevious}>Previous</Button>
-			<Button onClick={onNext}>Next</Button>
-			<Stack direction="row" ml="auto" gap={2}>
+		<Stack component="nav" direction="row" alignItems="center" py={1} gap={1}>
+			<Stack direction="row" mr="auto" gap={2}>
 				{rooms.map(({ id, name }) => (
 					<Chip
 						clickable
@@ -30,6 +30,12 @@ export const Navbar = ({
 					/>
 				))}
 			</Stack>
+			<IconButton onClick={onPrevious}>
+				<ArrowBackIosIcon sx={{ transform: 'translateX(4px)' }} />
+			</IconButton>
+			<IconButton onClick={onNext}>
+				<ArrowForwardIosIcon />
+			</IconButton>
 		</Stack>
 	);
 };
