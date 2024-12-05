@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { DateTime, WeekdayNumbers } from 'luxon';
-import { doGetPrices } from '../../api/actions/doGetPrices';
+import { DateTime } from 'luxon';
 import {
 	Box,
 	Button,
@@ -13,54 +12,26 @@ import {
 	Container,
 	AppBar,
 } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { SettingsData } from '../../../types';
 import { RoomPriceGenieLogo } from '../../roompricegenie-logo';
+import { useGetSettings } from '../../hooks/useGetSettings';
+import { useGetPrices } from '../../hooks/useGetPrices';
+import { parsePriceData } from './utils';
+import { DayLabels } from '../../components/DayLabels';
 
 const today = DateTime.now().startOf('month');
-const SEVEN_DAYS = new Array(7).fill(0);
 
 export const RootContainer = () => {
 	const [isoDate, setIsoDate] = useState(today.toISO() ?? '');
 	const [selectedRoom, setSelectedRoom] = useState<number>();
 	const date = DateTime.fromISO(isoDate);
-	const totalDays = date.daysInMonth;
 	const startOfMonth = date.startOf('month');
 
-	const { data } = useQuery({
-		queryKey: ['prices'],
-		queryFn: doGetPrices,
-		staleTime: 3000,
-		select: ({ currency, prices }) => {
-			const monthDays = new Array(totalDays).fill(0);
-			const { last_run_pricing_time } = prices;
-			const items = monthDays.map((_, index) => {
-				const nthDate = startOfMonth.plus({ days: index });
-				const key = nthDate.toFormat('yyyy-MM-dd');
-
-				return {
-					isoDate: nthDate.toISO(),
-					prices: prices.data[key],
-					currency,
-				};
-			});
-			const lastUpdate = DateTime.fromFormat(
-				last_run_pricing_time,
-				'yyyy-MM-dd HH:mm'
-			).toISO();
-			return { lastUpdate, items };
-		},
+	const { data } = useGetPrices({
+		select: (priceData) => parsePriceData({ priceData, date }),
 	});
 
-	const settings = useQuery({
-		queryKey: ['settings'],
-		queryFn: async () => {
-			const response = await fetch('/api/settings');
-
-			const data = (await response.json()) as SettingsData;
-			setSelectedRoom(data.rooms.reference.id);
-			return data;
-		},
+	const settings = useGetSettings({
+		onChange: ({ rooms }) => setSelectedRoom(rooms.reference.id),
 	});
 
 	const handlePrevious = () => {
@@ -114,28 +85,7 @@ export const RootContainer = () => {
 							))}
 						</Stack>
 					</Stack>
-					<Box
-						display="grid"
-						gridTemplateColumns="repeat(7, 1fr)"
-						borderBottom="solid 1px"
-						borderColor="grey.300"
-						py={1}
-						bgcolor="primary.main"
-						color="white"
-					>
-						{SEVEN_DAYS.map((_, index) => {
-							const nthDate = date.set({
-								weekday: (index + 1) as WeekdayNumbers,
-							});
-							const key = nthDate.toFormat('yyyy-MM-dd');
-							const label = nthDate.toFormat('EEEE');
-							return (
-								<Typography key={key} variant="body2" textAlign="center">
-									{label}
-								</Typography>
-							);
-						})}
-					</Box>
+					<DayLabels isoDate={isoDate} />
 				</Stack>
 				<Box
 					display="grid"
