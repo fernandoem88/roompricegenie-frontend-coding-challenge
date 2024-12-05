@@ -9,6 +9,7 @@ interface Props {
 	selectedRoomId: number;
 	onSelectedRoomIdChange: (roomId: number) => void;
 }
+
 export const Navbar = ({
 	onNext,
 	onPrevious,

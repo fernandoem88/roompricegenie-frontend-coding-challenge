@@ -1,10 +1,6 @@
-import type { SettingsData } from '../../../../types';
+import type { SettingsData } from '../../types';
 
-interface Params {
-	settingsData: SettingsData;
-}
-
-export const getRoomList = ({ settingsData }: Params) => {
+export const getRoomList = (settingsData: SettingsData) => {
 	if (!settingsData) return [];
 
 	const { reference, derived } = settingsData.rooms;

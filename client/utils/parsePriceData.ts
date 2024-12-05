@@ -4,10 +4,10 @@ import type { PriceData } from '../../types';
 interface Params {
 	priceData: PriceData;
 	date: DateTime;
-	selectedRoomId: number;
+	roomId: number;
 }
 
-export const parsePriceData = ({ priceData, date, selectedRoomId }: Params) => {
+export const parsePriceData = ({ priceData, date, roomId }: Params) => {
 	const { currency, prices } = priceData;
 	const totalDays = date.daysInMonth;
 	const startOfMonth = date.startOf('month');
@@ -17,7 +17,7 @@ export const parsePriceData = ({ priceData, date, selectedRoomId }: Params) => {
 		const nthDate = startOfMonth.plus({ days: index });
 		const key = nthDate.toFormat('yyyy-MM-dd');
 		const hotelPrices = prices.data[key];
-		const roomDetails = hotelPrices?.[selectedRoomId];
+		const roomDetails = hotelPrices?.[roomId];
 		return {
 			isoDate: nthDate.toISO(),
 			prices: hotelPrices,
@@ -31,15 +31,15 @@ export const parsePriceData = ({ priceData, date, selectedRoomId }: Params) => {
 		'yyyy-MM-dd HH:mm:ss'
 	).toISO();
 
-	const sortedPrices = items
-		.map(({ roomDetails }) => {
-			return roomDetails?.price ?? 0;
-		})
-		.sort((a, b) => a - b)
+	const nonNullPrices = items
+		.map(({ roomDetails }) => roomDetails?.price ?? 0)
 		.filter((price) => !!price);
+
+	const sortedPrices = nonNullPrices.sort((a, b) => a - b);
 
 	const minPrice = sortedPrices[0] ?? 0;
 	const maxPrice = sortedPrices.pop() ?? 0;
+	const totalRoomOffers = nonNullPrices.length;
 
-	return { lastUpdate, items, minPrice, maxPrice };
+	return { lastUpdate, items, minPrice, maxPrice, totalRoomOffers };
 };

@@ -19,8 +19,8 @@ export const SearchDescription = ({
 	const updateDate = DateTime.fromISO(lastUpdate);
 	const diff = maxPrice - minPrice;
 
-	const noRoomsText = `no rooms found with your selection for ${date.toFormat('LLLL')}`;
-	const variationText = `prices vary between ${minPrice} and ${maxPrice} ${currency} for ${date.toFormat('LLLL')}`;
+	const noRoomsText = `no rooms found with your search settings for ${date.toFormat('LLLL yyyy')}`;
+	const variationText = `prices vary between ${minPrice} and ${maxPrice} ${currency} for ${date.toFormat('LLLL yyyy')}`;
 	const updateText = `last update: ${updateDate.toFormat('DD HH:mm')}`;
 
 	return (
