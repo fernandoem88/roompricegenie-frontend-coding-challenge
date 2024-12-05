@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "vinxi dev",
-		"format": "prettier --write ."
+		"fmt": "prettier --write ."
 	},
 	"author": "",
 	"license": "ISC",

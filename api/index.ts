@@ -1,19 +1,19 @@
-import { format } from "date-fns";
-import { eventHandler, getRequestURL } from "vinxi/http";
-import type { PriceData, SettingsData } from "../types";
+import { format } from 'date-fns';
+import { eventHandler, getRequestURL } from 'vinxi/http';
+import type { PriceData, SettingsData } from '../types';
 
 export default eventHandler(async (event) => {
 	const info = getRequestURL(event);
-	if (info.pathname.startsWith("/api/prices")) {
+	if (info.pathname.startsWith('/api/prices')) {
 		const startDate = new Date();
 		const data: PriceData = {
 			currency: {
-				symbol: "NZ$",
-				code: "NZD",
+				symbol: 'NZ$',
+				code: 'NZD',
 			},
 			prices: {
 				data: {},
-				last_run_pricing_time: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+				last_run_pricing_time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
 			},
 		};
 
@@ -21,7 +21,7 @@ export default eventHandler(async (event) => {
 		for (let i = 0; i < 365; i++) {
 			const currentDate = new Date(startDate);
 			currentDate.setDate(currentDate.getDate() + i);
-			const dateKey = format(currentDate, "yyyy-MM-dd");
+			const dateKey = format(currentDate, 'yyyy-MM-dd');
 
 			const generatePriceData = (basePrice: number) => {
 				const isError = Math.random() > 0.8;
@@ -36,40 +36,40 @@ export default eventHandler(async (event) => {
 
 				return {
 					error: isError,
-					error_reason: isError ? "NO_AVAILABLE_MARKET_DATA" : undefined,
+					error_reason: isError ? 'NO_AVAILABLE_MARKET_DATA' : undefined,
 					price: isError ? null : finalPrice,
 					price_in_pms: isError ? null : pmsPrice,
 				};
 			};
 
 			data.prices.data[dateKey] = {
-				"1001": generatePriceData(Math.floor(Math.random() * 100) + 100), // Fixed base price for Single Room
-				"1002": generatePriceData(Math.floor(Math.random() * 120) + 100), // Fixed base price for Double Room
-				"1003": generatePriceData(Math.floor(Math.random() * 140) + 100), // Fixed base price for Family Room
+				'1001': generatePriceData(Math.floor(Math.random() * 100) + 100), // Fixed base price for Single Room
+				'1002': generatePriceData(Math.floor(Math.random() * 120) + 100), // Fixed base price for Double Room
+				'1003': generatePriceData(Math.floor(Math.random() * 140) + 100), // Fixed base price for Family Room
 			};
 		}
 
 		return data;
 	}
 
-	if (info.pathname.startsWith("/api/settings")) {
+	if (info.pathname.startsWith('/api/settings')) {
 		const data: SettingsData = {
 			hotel: {
-				timezone: "Pacific/Auckland",
-				locale: "en-NZ",
+				timezone: 'Pacific/Auckland',
+				locale: 'en-NZ',
 			},
 			rooms: {
 				derived: {
-					"1002": {
-						name: "Double Room",
+					'1002': {
+						name: 'Double Room',
 					},
-					"1003": {
-						name: "Family Room",
+					'1003': {
+						name: 'Family Room',
 					},
 				},
 				reference: {
 					id: 1001,
-					name: "Single Room",
+					name: 'Single Room',
 				},
 			},
 		};

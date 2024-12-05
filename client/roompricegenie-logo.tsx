@@ -1,4 +1,4 @@
-import { Box, Group } from "@mantine/core";
+import { Box, Group } from '@mantine/core';
 
 function RoomPriceGenieText(props: React.SVGProps<SVGSVGElement>) {
 	return (
@@ -44,11 +44,11 @@ function Genie(props: React.SVGProps<SVGSVGElement>) {
 
 export function RoomPriceGenieLogo(props: React.SVGProps<SVGSVGElement>) {
 	return (
-		<Group w="300px" wrap="nowrap" gap="xs">
-			<Box h="70px">
+		<Group w="210px" wrap="nowrap" gap="xs">
+			<Box h="59px">
 				<Genie className="fill-[#5B48EE]" />
 			</Box>
-			<Box h="50px">
+			<Box h="35px">
 				<RoomPriceGenieText className="fill-[#5B48EE]" />
 			</Box>
 		</Group>

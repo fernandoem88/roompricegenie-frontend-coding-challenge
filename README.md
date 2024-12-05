@@ -29,7 +29,7 @@ We appreciate that developing UI components can be time-consuming and the initia
 - `<Text />` for price display
 - `<LoadingOverlay />` for loading states
 
-*Mantine documentation can be found here: <https://mantine.dev/>*
+_Mantine documentation can be found here: <https://mantine.dev/>_
 
 The project includes `@tabler/icons-react` for icons. Some useful icons:
 
@@ -37,7 +37,7 @@ The project includes `@tabler/icons-react` for icons. Some useful icons:
 - `<IconAlertTriangle />` for error states
 - `<IconCalendar />` for calendar-related UI elements
 
-*A complete list of icons can be found here: <https://tabler.io/icons>*
+_A complete list of icons can be found here: <https://tabler.io/icons>_
 
 ## Time Expectation
 
@@ -48,7 +48,7 @@ This challenge is designed to be completed in 3 hours.
 The application provides two main endpoints:
 
 1. `/api/prices`
-Returns pricing data for all rooms for the next 365 days, including:
+   Returns pricing data for all rooms for the next 365 days, including:
 
 - Recommended price
 - Price in PMS
@@ -59,28 +59,28 @@ Reference the type definition here:
 
 ```typescript
 export type PriceData = {
-  currency: {
-    symbol: string;
-    code: string;
-  };
-  prices: {
-    data: {
-      [key: string]: {
-        [key: string]: {
-          error?: boolean;
-          error_reason?: string;
-          price: number;
-          price_in_pms: number | null;
-        };
-      };
-    };
-    last_run_pricing_time: string;
-  };
-}
+	currency: {
+		symbol: string;
+		code: string;
+	};
+	prices: {
+		data: {
+			[key: string]: {
+				[key: string]: {
+					error?: boolean;
+					error_reason?: string;
+					price: number;
+					price_in_pms: number | null;
+				};
+			};
+		};
+		last_run_pricing_time: string;
+	};
+};
 ```
 
 1. `/api/settings`
-Returns hotel configuration including:
+   Returns hotel configuration including:
 
 - Timezone
 - Locale
@@ -90,22 +90,22 @@ Reference the type definition here:
 
 ```typescript
 export type SettingsData = {
-  hotel: {
-    timezone: string;
-    locale: string;
-  };
-  rooms: {
-    derived: {
-      [key: string]: {
-        name: string;
-      };
-    };
-    reference: {
-      id: number;
-      name: string;
-    };
-  };
-}
+	hotel: {
+		timezone: string;
+		locale: string;
+	};
+	rooms: {
+		derived: {
+			[key: string]: {
+				name: string;
+			};
+		};
+		reference: {
+			id: number;
+			name: string;
+		};
+	};
+};
 ```
 
 ## Basic Requirements
@@ -133,26 +133,26 @@ Create a calendar component that displays:
 #### API Usage Example
 
 ```typescript
-import type { PriceData, SettingsData } from "../../types";
+import type { PriceData, SettingsData } from '../../types';
 
 export const getPrices = async () => {
-  const response = await fetch("/api/prices");
+	const response = await fetch('/api/prices');
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch prices");
-  }
+	if (!response.ok) {
+		throw new Error('Failed to fetch prices');
+	}
 
-  return response.json() as Promise<PriceData>;
+	return response.json() as Promise<PriceData>;
 };
 
 export const getSettings = async () => {
-  const response = await fetch("/api/settings");
+	const response = await fetch('/api/settings');
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch settings");
-  }
+	if (!response.ok) {
+		throw new Error('Failed to fetch settings');
+	}
 
-  return response.json() as Promise<SettingsData>;
+	return response.json() as Promise<SettingsData>;
 };
 ```
 
