@@ -1,4 +1,5 @@
 import { Stack, Alert } from '@mui/material';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useGetSettings } from '../hooks/useGetSettings';
 import { Navbar } from '../components/Navbar';
 import { DayLabels } from '../components/DayLabels';
@@ -43,7 +44,7 @@ export const NavigationContainer = ({
 			<DayLabels isoDate={isoDate} />
 
 			{!selectedRoom && (
-				<Alert color="error">
+				<Alert color="error" icon={<WarningAmberIcon />}>
 					Incorrect Settings, please select another room.
 				</Alert>
 			)}

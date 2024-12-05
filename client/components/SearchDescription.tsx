@@ -1,6 +1,7 @@
 import { Alert, Stack, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
-
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 interface Props {
 	minPrice: number;
 	maxPrice: number;
@@ -24,7 +25,10 @@ export const SearchDescription = ({
 	const updateText = `last update: ${updateDate.toFormat('DD HH:mm')}`;
 
 	return (
-		<Alert color={diff ? 'info' : 'error'}>
+		<Alert
+			color={diff ? 'info' : 'error'}
+			icon={diff ? <InfoOutlinedIcon /> : <WarningAmberIcon />}
+		>
 			<Stack direction="row" gap={2} divider={<span>-</span>}>
 				<Typography variant="body2">
 					{diff ? variationText : noRoomsText}
