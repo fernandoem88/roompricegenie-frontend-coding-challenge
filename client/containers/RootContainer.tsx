@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { DateTime } from 'luxon';
 import { Stack, Container } from '@mui/material';
-import { useGetPrices } from '../../hooks/useGetPrices';
-import { parsePriceData } from '../../utils/parsePriceData';
-import { SearchDescription } from '../../components/SearchDescription';
-import { AppHeader } from '../../components/AppHeader';
-import { NavigationContainer } from '../NavigationContainer';
-import { PriceCalendarContainer } from '../PriceCalendarContainer';
-import { useGetSettings } from '../../hooks/useGetSettings';
-import { getRoomList } from '../../utils/getRoomList';
+import { useGetPrices } from '../hooks/useGetPrices';
+import { parsePriceData } from '../utils/parsePriceData';
+import { useGetSettings } from '../hooks/useGetSettings';
+import { getRoomList } from '../utils/getRoomList';
+import { AppHeader } from '../components/AppHeader';
+import { NavigationContainer } from './NavigationContainer';
+import { SearchDescription } from '../components/SearchDescription';
+import { PriceCalendarContainer } from './PriceCalendarContainer';
 
 const today = DateTime.now().startOf('month');
 
@@ -26,6 +26,9 @@ export const RootContainer = () => {
 	const handleNext = () => setIsoDate(date.plus({ month: 1 }).toISO());
 
 	const selectedRoom = settings.data?.find((room) => room.id === roomId);
+
+	const isLoading = settings.isLoading || prices.isLoading;
+	if (isLoading) return <div>Loading....</div>;
 
 	return (
 		<Container
