@@ -1,5 +1,38 @@
 # RoomPriceGenie Frontend Coding Challenge
 
+## Solution Overview
+
+This solution displays all room prices for a selected month in a calendar format.
+
+### Features
+
+1. **Month Navigation and Room Selection**:
+
+   - Navigate between months using controls at the top of the calendar.
+   - Change settings by selecting a specific room.
+
+2. **Price Categorization**:
+
+   - Prices are divided into three categories: **low**, **medium**, and **high**.
+   - The categorization is calculated using the formula:
+     ```
+     Offset = (Max Price - Min Price) / 3
+     ```
+   - Price ranges:
+     - **Low:** `Min Price` to `Min Price + Offset`
+     - **Medium:** `Min Price + Offset` to `Min Price + 2 * Offset`
+     - **High:** `Min Price + 2 * Offset` to `Max Price`
+
+3. **Visual Indicators**:
+
+   - **Low prices**: Cards are displayed with a **red background color**.
+   - **High prices**: Cards are displayed with a **green background color**.
+
+4. **Error Handling**:
+   - If there is no price provided, a **warning icon** is displayed at the bottom part of the card.
+
+---
+
 ## Overview
 
 In RoomPriceGenie we distinguish between a reference room type and derived room types. At the core is the base price of a room. In addition, the pricing strategy can deeply influence the price of the room for each day. RoomPriceGenie calculates the daily recommended price for each room type and can upload the price to the PMS **for hotels all across various timezones**.
