@@ -2,11 +2,9 @@ import { useState } from 'react';
 import { DateTime } from 'luxon';
 import {
 	Box,
-	Button,
 	Card,
 	CardContent,
 	CardHeader,
-	Chip,
 	Stack,
 	Typography,
 	Container,
@@ -17,6 +15,7 @@ import { useGetSettings } from '../../hooks/useGetSettings';
 import { useGetPrices } from '../../hooks/useGetPrices';
 import { parsePriceData } from './utils';
 import { DayLabels } from '../../components/DayLabels';
+import { Navbar } from '../../components/Navbar';
 
 const today = DateTime.now().startOf('month');
 
@@ -69,29 +68,16 @@ export const RootContainer = () => {
 			</AppBar>
 			<Stack pb={2} overflow="scroll">
 				<Stack position="sticky" top={0} bgcolor="white" zIndex={1}>
-					<Stack component="nav" direction="row" alignItems="center" py={1}>
-						<Button onClick={handlePrevious}>Previous</Button>
-						<Button onClick={handleNext}>Next</Button>
-						<Stack direction="row" ml="auto" gap={2}>
-							{rooms?.map(({ id, name }) => (
-								<Chip
-									clickable
-									size="small"
-									onClick={() => setSelectedRoom(id)}
-									key={id}
-									label={name}
-									color={selectedRoom === id ? 'primary' : undefined}
-								/>
-							))}
-						</Stack>
-					</Stack>
+					<Navbar
+						onNext={handleNext}
+						onPrevious={handlePrevious}
+						onSelectedRoomIdChange={setSelectedRoom}
+						rooms={rooms ?? []}
+						selectedRoomId={selectedRoom}
+					/>
 					<DayLabels isoDate={isoDate} />
 				</Stack>
-				<Box
-					display="grid"
-					gridTemplateColumns="repeat(7, 1fr)"
-					// gridTemplateRows={`repeat(${Math.ceil(totalDays / 7)}, 1fr)`}
-				>
+				<Box display="grid" gridTemplateColumns="repeat(7, 1fr)">
 					{data?.items.map(({ prices, currency, isoDate }) => {
 						const nthDate = DateTime.fromISO(isoDate);
 						const key = nthDate.toFormat('yyyy-MM-dd');
