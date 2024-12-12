@@ -26,6 +26,7 @@ export const SearchDescription = ({
 
 	return (
 		<Alert
+			sx={{ position: 'sticky', left: 0 }}
 			color={diff ? 'info' : 'error'}
 			icon={diff ? <InfoOutlinedIcon /> : <WarningAmberIcon />}
 		>

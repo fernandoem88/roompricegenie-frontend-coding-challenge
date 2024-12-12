@@ -33,7 +33,7 @@ export const NavigationContainer = ({
 	const selectedRoom = rooms.find((room) => room.id === roomId);
 
 	return (
-		<Stack position="sticky" top={0} bgcolor="white" zIndex={1}>
+		<Stack position="sticky" top={0} left={0} bgcolor="white" zIndex={1}>
 			<Navbar
 				onNext={onNext}
 				onPrevious={onPrevious}

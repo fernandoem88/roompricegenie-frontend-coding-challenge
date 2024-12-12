@@ -29,7 +29,6 @@ export const PriceCalendarContainer = ({ isoDate, roomId }: Props) => {
 			mt={2}
 			gap={2}
 			width={1}
-			sx={{ overflowX: 'auto' }}
 		>
 			{prices.data?.items.map(({ currency, isoDate, roomDetails }) => {
 				const nthDate = DateTime.fromISO(isoDate);
