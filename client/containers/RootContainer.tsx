@@ -33,6 +33,7 @@ export const RootContainer = () => {
 	return (
 		<Container
 			sx={{
+				maxWidth: '100vw',
 				height: '100vh',
 				display: 'grid',
 				gridTemplateRows: 'auto 1fr',

@@ -23,7 +23,14 @@ export const PriceCalendarContainer = ({ isoDate, roomId }: Props) => {
 	if (!prices.data) return null;
 
 	return (
-		<Box display="grid" gridTemplateColumns="repeat(7, 1fr)" mt={2} gap={2}>
+		<Box
+			display="grid"
+			gridTemplateColumns="repeat(7, 1fr)"
+			mt={2}
+			gap={2}
+			width={1}
+			sx={{ overflowX: 'auto' }}
+		>
 			{prices.data?.items.map(({ currency, isoDate, roomDetails }) => {
 				const nthDate = DateTime.fromISO(isoDate);
 				const key = nthDate.toFormat('yyyy-MM-dd');
